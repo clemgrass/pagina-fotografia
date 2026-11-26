@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 clemgrass
+# SPDX-License-Identifier: Apache-2.0
+
+# Herramientas de la sesión (clon de Modern Web Guidance). No son parte del sitio.
+/tools/
