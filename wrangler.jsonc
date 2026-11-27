@@ -1,0 +1,19 @@
+// SPDX-FileCopyrightText: 2026 clemgrass
+// SPDX-License-Identifier: Apache-2.0
+
+// Worker solo con assets en workers.dev (ADR 0001). Sin secretos: el token y
+// la cuenta llegan como CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID desde el
+// environment `production` de GitHub (ADR 0017). Pasos en docs/cloudflare.md.
+// Las reglas las verifica scripts/wrangler.test.ts.
+{
+  // El token solo puede tocar este Worker: cambiar el nombre pide uno nuevo.
+  "name": "foto",
+  "compatibility_date": "2026-11-27",
+  "workers_dev": true,
+  // Las Version URLs son públicas y workers.dev las prende por defecto.
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+  },
+}
