@@ -14,12 +14,13 @@
   "scripts": {
     "prepare": "git config core.hooksPath .githooks",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "pnpm photos:build && astro build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "astro check",
     "test": "node --test \"scripts/**/*.test.ts\"",
     "photos:clean": "node scripts/photos/originals.ts clean",
+    "photos:build": "node scripts/photos/variants.ts",
     "check:photos": "node scripts/photos/originals.ts check",
     "lint:reuse": "uvx reuse@6.3.0 lint",
     "lint:actions": "uvx zizmor@1.32.0 .github",
@@ -34,6 +35,7 @@
     "@types/node": "26.6.6",
     "prettier": "3.10.1",
     "prettier-plugin-astro": "1.1.2",
+    "sharp": "0.35.5",
     "typescript": "6.0.3"
   }
 }
