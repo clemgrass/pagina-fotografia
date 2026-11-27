@@ -3,6 +3,8 @@
 
 # Herramientas de la sesión (clon de Modern Web Guidance). No son parte del sitio.
 /tools/
+# Bitácora de los planes de superpowers.
+/.superpowers/
 
 # Dependencias y resultados del build.
 node_modules/

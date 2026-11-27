@@ -16,4 +16,7 @@ savePrefix: ''
 # Un paquete con scripts de instalación hace fallar `pnpm install` hasta que
 # alguien decide en `allowBuilds` si se ejecutan (true) o no (false).
 strictDepBuilds: true
-allowBuilds: {}
+# Wrangler solo publica assets: no necesita compilar ni correr workerd (ADR 0018).
+allowBuilds:
+  esbuild: false
+  workerd: false
