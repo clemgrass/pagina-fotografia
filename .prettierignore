@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2026 clemgrass
+# SPDX-License-Identifier: Apache-2.0
+
+# Prettier ya ignora lo que está en .gitignore.
+pnpm-lock.yaml
+LICENSE
+LICENSES/
