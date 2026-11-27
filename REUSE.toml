@@ -16,6 +16,12 @@ path = [
 SPDX-FileCopyrightText = "2026 clemgrass"
 SPDX-License-Identifier = "Apache-2.0"
 
+# Fotos: CC BY 4.0, con crédito a "clemgrass".
+[[annotations]]
+path = ["photos/originals/**"]
+SPDX-FileCopyrightText = "2026 clemgrass"
+SPDX-License-Identifier = "CC-BY-4.0"
+
 # Documentación del repo: textos, CC BY 4.0.
 [[annotations]]
 path = ["*.md", "docs/**", ".github/**/*.md"]

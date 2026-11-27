@@ -19,9 +19,11 @@
     "format:check": "prettier --check .",
     "typecheck": "astro check",
     "test": "node --test \"scripts/**/*.test.ts\"",
+    "photos:clean": "node scripts/photos/originals.ts clean",
+    "check:photos": "node scripts/photos/originals.ts check",
     "lint:reuse": "uvx reuse@6.3.0 lint",
     "lint:actions": "uvx zizmor@1.32.0 .github",
-    "check:fast": "pnpm format:check && pnpm typecheck && pnpm test",
+    "check:fast": "pnpm format:check && pnpm typecheck && pnpm test && pnpm check:photos",
     "check": "pnpm check:fast && pnpm build && pnpm lint:reuse && pnpm lint:actions"
   },
   "dependencies": {
