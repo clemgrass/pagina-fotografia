@@ -1,5 +1,5 @@
 ---
-status: propuesta
+status: aceptada
 date: 2026-11-27
 ---
 
