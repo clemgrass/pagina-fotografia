@@ -8,6 +8,7 @@ import { parseHeaders } from './headers.ts';
 import {
   SMOKE_PATHS,
   SMOKE_USER_AGENT,
+  distFile,
   observe,
   smokeProblems,
   type Observed,
@@ -24,6 +25,13 @@ const rules = parseHeaders(
   ].join('\n'),
 );
 
+// Contenido de cada ruta en el dist/ recién publicado.
+const DIST: Record<string, string> = {
+  '/': '<html lang="es">nuevo</html>',
+  '/en/': '<html lang="en">new</html>',
+  '/speculation-rules.json': '{"prefetch":[]}',
+};
+
 /** Respuestas sanas de las tres rutas; cada test cambia lo que prueba. */
 function healthy(): Observed[] {
   return [
@@ -34,6 +42,7 @@ function healthy(): Observed[] {
         'content-security-policy': CSP,
         'content-type': 'text/html',
       },
+      body: DIST['/'] ?? '',
     },
     {
       path: '/en/',
@@ -42,11 +51,13 @@ function healthy(): Observed[] {
         'content-security-policy': CSP,
         'content-type': 'text/html',
       },
+      body: DIST['/en/'] ?? '',
     },
     {
       path: '/speculation-rules.json',
       status: 200,
       headers: { 'content-security-policy': CSP, 'content-type': RULES_TYPE },
+      body: DIST['/speculation-rules.json'] ?? '',
     },
   ];
 }
@@ -113,6 +124,31 @@ describe('smokeProblems', () => {
     );
   });
 
+  test('rechaza una coma aunque venga después de los parámetros', () => {
+    const observed = withHeader(
+      '/speculation-rules.json',
+      'content-type',
+      `${RULES_TYPE}; charset=utf-8, application/json`,
+    );
+    assert.match(
+      smokeProblems(observed, rules).join('\n'),
+      /^\/speculation-rules\.json: .*Content-Type/,
+    );
+  });
+
+  test('acepta el contenido igual al de dist/', () => {
+    assert.deepEqual(smokeProblems(healthy(), rules, DIST), []);
+  });
+
+  test('reporta un contenido distinto del de dist/ (sigue la versión anterior)', () => {
+    const observed = healthy().map((entry) =>
+      entry.path === '/en/' ? { ...entry, body: '<html>viejo</html>' } : entry,
+    );
+    assert.deepEqual(smokeProblems(observed, rules, DIST), [
+      '/en/: el contenido no es el de dist/ (¿sigue la versión anterior?)',
+    ]);
+  });
+
   test('reporta una ruta con error de red', () => {
     const observed: Observed[] = [
       ...healthy().slice(1),
@@ -165,6 +201,7 @@ describe('observe', () => {
         'content-security-policy': CSP,
         'content-type': 'text/plain;charset=UTF-8',
       },
+      body: 'ok',
     });
   });
 
@@ -191,5 +228,39 @@ describe('observe', () => {
       failing,
     );
     assert.deepEqual(observed, [{ path: '/', error: 'fetch failed' }]);
+  });
+
+  test('incluye la causa del error de red', async () => {
+    const failing: typeof fetch = async () => {
+      throw new TypeError('fetch failed', {
+        cause: new Error('getaddrinfo ENOTFOUND foto.example.workers.dev'),
+      });
+    };
+    const observed = await observe(
+      'https://foto.example.workers.dev',
+      ['/'],
+      failing,
+    );
+    assert.deepEqual(observed, [
+      {
+        path: '/',
+        error: 'fetch failed: getaddrinfo ENOTFOUND foto.example.workers.dev',
+      },
+    ]);
+  });
+});
+
+describe('distFile', () => {
+  test('una ruta de carpeta es su index.html', () => {
+    assert.equal(distFile('/'), 'index.html');
+    assert.equal(distFile('/en/'), 'en/index.html');
+  });
+
+  test('una ruta de archivo es el mismo archivo', () => {
+    assert.equal(distFile('/speculation-rules.json'), 'speculation-rules.json');
+  });
+
+  test('rechaza una ruta que sale de dist/', () => {
+    assert.throws(() => distFile('/../secreto'), /dist/);
   });
 });

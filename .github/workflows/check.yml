@@ -59,6 +59,8 @@ jobs:
           name: dist
           path: dist/
           if-no-files-found: error
+          # Sin esto se pierde en silencio un futuro `.well-known/`.
+          include-hidden-files: true
           retention-days: 1
           compression-level: 0
 
@@ -128,15 +130,17 @@ jobs:
           exit 1
 
       # Espera fija a que la versión se propague, sin reintentos (ADR 0013).
+      # Compara el contenido con dist/: si Cloudflare todavía sirve la versión
+      # anterior, falla en vez de pasar sin haber revisado la nueva.
       # Corre aunque falle el deploy: un intento puede activar la versión nueva
-      # y fallar después. Si quedó la anterior, el smoke pasa y el job sigue
-      # en rojo por el deploy.
+      # y fallar después. Si quedó la anterior, el smoke falla por contenido y
+      # el rollback vuelve a esa misma versión.
       - name: smoke
         id: smoke
         if: ${{ !cancelled() && steps.previous.outcome == 'success' }}
         run: |
           sleep 30
-          node scripts/smoke.ts https://foto.clemgrass.workers.dev
+          node scripts/smoke.ts https://foto.clemgrass.workers.dev dist
 
       - name: rollback si falla el smoke
         if: failure() && steps.smoke.outcome == 'failure'
@@ -145,5 +149,8 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PREVIOUS: ${{ steps.previous.outputs.version }}
         run: |
-          pnpm exec wrangler rollback "$PREVIOUS" --message "smoke falló en $GITHUB_SHA"
+          if ! pnpm exec wrangler rollback "$PREVIOUS" --message "smoke falló en $GITHUB_SHA"; then
+            echo "::error::El rollback a $PREVIOUS falló: el sitio puede estar roto. Revisa Deployments en Cloudflare."
+            exit 1
+          fi
           echo "::error::El smoke falló: se volvió a la versión $PREVIOUS."
