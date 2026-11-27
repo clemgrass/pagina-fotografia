@@ -7,6 +7,7 @@
 # Dependencias y resultados del build.
 node_modules/
 /dist/
+/public/photos/
 /.astro/
 /.cache/
 

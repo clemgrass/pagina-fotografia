@@ -26,7 +26,10 @@ qué carga tan rápido y en qué orden.
 
 ### Galería
 
-- Entre 30 y 50 fotos de 35 mm, sin personas. Escaneos en JPEG de 1,3 a 5 MB.
+- Entre 20 y 50 fotos de 35 mm, sin personas. El mínimo bajó de 30 a 20 el 2026-11-26:
+  menos fotos de las calculadas cumplían los criterios, sobre todo el de no mostrar personas.
+- Escaneos en JPEG del Frontier SP-3000, de 0,5 a 1,8 MB y hasta 2043 px por lado.
+- Originales en `photos/originals/<slug>.jpg`, con el slug descriptivo de la foto.
 - Cámaras: Asahi Pentax SP1000, Nikon N8008 y Leica M2.
 - Una grilla y una página por foto, con URL propia.
 - Cada foto tiene título y `alt` en español e inglés, cámara y rollo, y el aviso
