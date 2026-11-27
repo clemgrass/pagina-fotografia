@@ -14,7 +14,8 @@ menú marcados "(no verificado)" pueden haber cambiado.
 ## 2. Elegir el subdominio
 
 La URL del sitio queda `foto.<subdominio>.workers.dev`. `foto` es el `name` de
-`wrangler.jsonc`.
+`wrangler.jsonc`. Hoy es <https://foto.clemgrass.workers.dev/>, y el smoke la usa fija en
+`.github/workflows/check.yml`: si cambias el subdominio, cámbiala ahí también.
 
 1. Ve a **Workers & Pages**.
 2. Elige el subdominio de la cuenta. Si ya tiene uno, cámbialo con **Change**, junto a
@@ -56,6 +57,33 @@ No es una credencial, pero va como secreto en GitHub, igual que el token.
 
 Para comprobarlo, corre `gh secret list --env production`: muestra los nombres, nunca los
 valores.
+
+## Si el deploy falla
+
+El job `deploy` de `check.yml` corre en cada push a `main` (ADR 0003 y 0013). Si falla,
+GitHub te avisa por correo y el run queda en rojo en **Actions**. El paso en rojo dice qué
+pasó:
+
+- **previous (versión activa):** no pudo leer la versión activa (token vencido, permisos o
+  un deploy gradual a medias). No se publicó nada.
+- **wrangler deploy:** falló 3 veces, con 2 minutos entre intentos. Un intento pudo haber
+  activado la versión nueva antes de fallar, así que el smoke corre igual. Si pasa, la
+  versión nueva quedó activa y sana. Si no, el rollback vuelve a la anterior; si esa
+  seguía activa, la despliega de nuevo (no verificado contra Cloudflare).
+- **smoke:** el sitio no pasó el smoke, y el paso **rollback si falla el smoke** volvió a
+  la versión que estaba activa antes del deploy. Su log dice qué falló: estado, CSP,
+  `Content-Type`, o un contenido distinto del `dist/` publicado (Cloudflare todavía
+  servía la versión anterior tras los 30 s de espera). El rollback queda también en
+  **Workers & Pages** → `foto` → **Deployments**, con el mensaje "smoke falló en
+  <commit>".
+- **rollback si falla el smoke:** el rollback falló y el sitio puede estar roto. Revisa en
+  **Deployments** qué versión está activa y vuelve a una sana desde ahí.
+
+Después de corregir la causa, publica con un PR nuevo. Si el problema era de Cloudflare y
+no del código, usa **Re-run failed jobs**, que vuelve a publicar el mismo `dist/` de ese
+run, y solo si es el último run de `main`: uno más viejo publicaría un sitio viejo. El
+smoke se corre a mano con `node scripts/smoke.ts https://foto.clemgrass.workers.dev`;
+con `dist` al final compara además el contenido con tu build local.
 
 ## Uso y límites del plan gratis
 
