@@ -64,18 +64,22 @@ El job `deploy` de `check.yml` corre en cada push a `main` (ADR 0003 y 0013). Si
 GitHub te avisa por correo y el run queda en rojo en **Actions**. El paso en rojo dice qué
 pasó:
 
-- **El paso `previous`:** no pudo leer la versión activa (token vencido, permisos o un
-  deploy gradual a medias). No se publicó nada.
-- **`wrangler deploy`:** falló 3 veces, con 2 minutos entre intentos. El sitio sigue en la
-  versión anterior.
-- **El paso `smoke`:** el sitio nuevo no pasó el smoke, y el paso **rollback si falla el
-  smoke** volvió a la versión que estaba activa. Su log dice a qué versión. El rollback
+- **previous (versión activa):** no pudo leer la versión activa (token vencido, permisos o
+  un deploy gradual a medias). No se publicó nada.
+- **wrangler deploy:** falló 3 veces, con 2 minutos entre intentos. Un intento pudo haber
+  activado la versión nueva antes de fallar, así que el smoke corre igual: si pasa, el
+  sitio quedó sano, en la versión que sea.
+- **smoke:** el sitio no pasó el smoke, y el paso **rollback si falla el smoke** volvió a
+  la versión que estaba activa antes del deploy. Su log dice a qué versión. El rollback
   queda también en **Workers & Pages** → `foto` → **Deployments**, con el mensaje
   "smoke falló en <commit>".
+- **rollback si falla el smoke:** el rollback falló y el sitio puede estar roto. Revisa en
+  **Deployments** qué versión está activa y vuelve a una sana desde ahí.
 
-Después de corregir la causa, publica con un PR nuevo, o con **Re-run all jobs** si el
-problema era de Cloudflare y no del código. El smoke se corre a mano con
-`node scripts/smoke.ts https://foto.clemgrass.workers.dev`.
+Después de corregir la causa, publica con un PR nuevo. Si el problema era de Cloudflare y
+no del código, usa **Re-run failed jobs**, que vuelve a publicar el mismo `dist/` de ese
+run, y solo si es el último run de `main`: uno más viejo publicaría un sitio viejo. El
+smoke se corre a mano con `node scripts/smoke.ts https://foto.clemgrass.workers.dev`.
 
 ## Uso y límites del plan gratis
 
