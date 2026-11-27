@@ -43,8 +43,14 @@ describe('checkHeader', () => {
     ok('refactor(scripts)!: renombrar el validador');
   });
 
-  test('acepta un encabezado de 72 caracteres exactos', () => {
-    ok(`chore: ${'a'.repeat(72 - 'chore: '.length)}`);
+  test('acepta un encabezado de 100 caracteres exactos', () => {
+    ok(`chore: ${'a'.repeat(100 - 'chore: '.length)}`);
+  });
+
+  test('acepta el título que genera Dependabot para un grupo', () => {
+    ok(
+      'ci(deps): Bump astral-sh/setup-uv from 10.3.3 to 10.4.0 in the actions group',
+    );
   });
 
   test('acepta el mensaje que genera git al hacer merge', () => {
@@ -67,8 +73,8 @@ describe('checkHeader', () => {
     bad('feat:');
   });
 
-  test('rechaza un encabezado de más de 72 caracteres', () => {
-    bad(`chore: ${'a'.repeat(73 - 'chore: '.length)}`);
+  test('rechaza un encabezado de más de 100 caracteres', () => {
+    bad(`chore: ${'a'.repeat(101 - 'chore: '.length)}`);
   });
 
   test('rechaza una descripción que termina en punto', () => {

@@ -22,7 +22,9 @@ export const TYPES = [
   'test',
 ] as const;
 
-export const MAX_HEADER_LENGTH = 72;
+// El valor por defecto de commitlint. Cabe el título que arma Dependabot:
+// "ci(deps): Bump <paquete> from X to Y in the <grupo> group".
+export const MAX_HEADER_LENGTH = 100;
 
 /** Primera línea con contenido, sin los comentarios que agrega git. */
 export function headerOf(message: string): string {
