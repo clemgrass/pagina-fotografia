@@ -14,7 +14,8 @@ menú marcados "(no verificado)" pueden haber cambiado.
 ## 2. Elegir el subdominio
 
 La URL del sitio queda `foto.<subdominio>.workers.dev`. `foto` es el `name` de
-`wrangler.jsonc`.
+`wrangler.jsonc`. Hoy es <https://foto.clemgrass.workers.dev/>, y el smoke la usa fija en
+`.github/workflows/check.yml`: si cambias el subdominio, cámbiala ahí también.
 
 1. Ve a **Workers & Pages**.
 2. Elige el subdominio de la cuenta. Si ya tiene uno, cámbialo con **Change**, junto a
@@ -56,6 +57,25 @@ No es una credencial, pero va como secreto en GitHub, igual que el token.
 
 Para comprobarlo, corre `gh secret list --env production`: muestra los nombres, nunca los
 valores.
+
+## Si el deploy falla
+
+El job `deploy` de `check.yml` corre en cada push a `main` (ADR 0003 y 0013). Si falla,
+GitHub te avisa por correo y el run queda en rojo en **Actions**. El paso en rojo dice qué
+pasó:
+
+- **El paso `previous`:** no pudo leer la versión activa (token vencido, permisos o un
+  deploy gradual a medias). No se publicó nada.
+- **`wrangler deploy`:** falló 3 veces, con 2 minutos entre intentos. El sitio sigue en la
+  versión anterior.
+- **El paso `smoke`:** el sitio nuevo no pasó el smoke, y el paso **rollback si falla el
+  smoke** volvió a la versión que estaba activa. Su log dice a qué versión. El rollback
+  queda también en **Workers & Pages** → `foto` → **Deployments**, con el mensaje
+  "smoke falló en <commit>".
+
+Después de corregir la causa, publica con un PR nuevo, o con **Re-run all jobs** si el
+problema era de Cloudflare y no del código. El smoke se corre a mano con
+`node scripts/smoke.ts https://foto.clemgrass.workers.dev`.
 
 ## Uso y límites del plan gratis
 
