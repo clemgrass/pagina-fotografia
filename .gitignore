@@ -3,3 +3,18 @@
 
 # Herramientas de la sesión (clon de Modern Web Guidance). No son parte del sitio.
 /tools/
+
+# Dependencias y resultados del build.
+node_modules/
+/dist/
+/.astro/
+/.cache/
+
+# Secretos y estado local de Wrangler. Nunca van al repo.
+.env*
+.dev.vars*
+.wrangler/
+
+# Ruido del sistema y de las herramientas.
+*.log
+.DS_Store

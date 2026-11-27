@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2026 clemgrass
+# SPDX-License-Identifier: Apache-2.0
+
+# Licencias de los archivos que no admiten una cabecera SPDX (ADR 0005).
+version = 1
+
+# Configuración en JSON y archivos generados: código, Apache-2.0.
+[[annotations]]
+path = [
+  "package.json",
+  "tsconfig.json",
+  "pnpm-lock.yaml",
+  "NOTICE",
+  ".claude/settings.json",
+]
+SPDX-FileCopyrightText = "2026 clemgrass"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Documentación del repo: textos, CC BY 4.0.
+[[annotations]]
+path = ["*.md", "docs/**", ".github/**/*.md"]
+SPDX-FileCopyrightText = "2026 clemgrass"
+SPDX-License-Identifier = "CC-BY-4.0"

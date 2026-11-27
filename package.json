@@ -1,0 +1,37 @@
+{
+  "name": "pagina-fotografia",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@12.22.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "26.13.1",
+      "onFail": "download"
+    }
+  },
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
+    "dev": "astro dev",
+    "build": "astro build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "astro check",
+    "test": "node --test \"scripts/**/*.test.ts\"",
+    "lint:reuse": "uvx reuse@6.3.0 lint",
+    "lint:actions": "uvx zizmor@1.32.0 .github",
+    "check:fast": "pnpm format:check && pnpm typecheck && pnpm test",
+    "check": "pnpm check:fast && pnpm build && pnpm lint:reuse && pnpm lint:actions"
+  },
+  "dependencies": {
+    "astro": "7.4.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/node": "26.6.6",
+    "prettier": "3.10.1",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "6.0.3"
+  }
+}

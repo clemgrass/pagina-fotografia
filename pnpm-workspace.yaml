@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2026 clemgrass
+# SPDX-License-Identifier: Apache-2.0
+
+# Ver docs/decisiones/0006-pnpm-node-versiones-fijadas-y-dependabot.md.
+
+# Solo se instalan versiones con al menos 7 días de publicadas (en minutos).
+minimumReleaseAge: 10080
+
+# Un parche de seguridad de menos de 7 días va aquí con su versión exacta,
+# en el mismo PR, y sale cuando cumple los 7 días.
+minimumReleaseAgeExclude: []
+
+# `pnpm add` guarda la versión exacta, sin `^`.
+savePrefix: ''
+
+# Un paquete con scripts de instalación hace fallar `pnpm install` hasta que
+# alguien decide en `allowBuilds` si se ejecutan (true) o no (false).
+strictDepBuilds: true
+allowBuilds: {}
