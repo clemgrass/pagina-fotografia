@@ -3,6 +3,9 @@
 
 # Actualizaciones agrupadas una vez al mes, con 7 días de espera (ADR 0006).
 # Los PR de seguridad no esperan: no entran en los grupos ni en el cooldown.
+#
+# El cooldown es de 8 días: con 7, Dependabot abrió un PR a los 6 días y 12 horas
+# de publicada la versión (setup-uv 10.4.0, PR #19).
 version: 2
 
 updates:
@@ -11,7 +14,12 @@ updates:
     schedule:
       interval: monthly
     cooldown:
-      default-days: 7
+      default-days: 8
+    ignore:
+      # `astro check` no soporta TypeScript 7 (astro 7.4.13, @astrojs/check
+      # 0.9.12). Se quita cuando Astro lo soporte.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
       npm:
         patterns: ['*']
@@ -24,7 +32,7 @@ updates:
     schedule:
       interval: monthly
     cooldown:
-      default-days: 7
+      default-days: 8
     groups:
       actions:
         patterns: ['*']
