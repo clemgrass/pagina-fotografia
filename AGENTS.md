@@ -10,6 +10,7 @@ gama baja o un notebook de 4 GB, no sirve.
 ## Forma de trabajar
 
 ### Ritmo
+
 - Una tarea a la vez. Al terminarla, muestra el resultado y espera aprobación explícita.
 - No te adelantes: un plan aprobado no aprueba el código, ni el texto del PR, ni el paso siguiente.
 - Si algo grande no está claro, pregunta antes. Una duda menor que no cambia lo que se
@@ -17,6 +18,7 @@ gama baja o un notebook de 4 GB, no sirve.
 - Parte el trabajo grande en piezas chicas que se revisen de una vez.
 
 ### Quién decide
+
 - Decide el usuario. Tú investigas, propones con fundamentos y recomiendas una opción.
 - Investiga en fuentes primarias y vigentes (documentación oficial de la versión actual,
   changelogs, releases). Anota URL y fecha; marca lo no verificado.
@@ -25,6 +27,7 @@ gama baja o un notebook de 4 GB, no sirve.
 - No cambies lo decidido. Si ves una mejora grande, detente y explica beneficios, costos y desventajas.
 
 ### Decisiones por escrito
+
 - ADR en `docs/decisiones/NNNN-titulo.md` (MADR 4 recortado: Contexto, Opciones con
   contras, Decisión, Consecuencias, Confirmación) para lo difícil de revertir, lo que toca
   más de una pieza o lo que alguien cuestionará en seis meses.
@@ -37,17 +40,20 @@ gama baja o un notebook de 4 GB, no sirve.
 - Anota cada decisión del usuario apenas la toma.
 
 ### Entender antes de construir
+
 - Primero qué y por qué; después cómo.
 - Antes de cambiar algo, lee el código y los documentos que lo explican. No supongas que el
   estado sigue igual que en la sesión anterior.
 
 ### Listo significa evidencia
+
 - Terminado significa mostrar el comando de verificación y su salida.
 - Lo que no pudiste verificar se dice tal cual, con el motivo.
 - Interfaz: recórrela con Playwright en móvil (360×800) y escritorio, en español e inglés.
   Muestra capturas del estado inicial, la interacción y el resultado en la sesión, no en el PR.
 
 ### Textos
+
 - Español de Chile, tuteando ("puedes", "elige"). Nunca voseo.
 - Términos técnicos en inglés cuando no tienen traducción natural (`deploy`, `endpoint`).
 - Oraciones cortas, lo importante primero, sin relleno. Vale para documentos, commits, PRs,
@@ -55,6 +61,7 @@ gama baja o un notebook de 4 GB, no sirve.
 - Código, nombres y carpetas en inglés. Textos del sitio en español e inglés.
 
 ### Herramientas
+
 - Crea y edita archivos con las herramientas de edición, no con scripts de shell.
 - No salgas de la carpeta del proyecto ni toques otros repos.
 - Lo que creas para probar queda versionado o documentado.
@@ -64,10 +71,12 @@ gama baja o un notebook de 4 GB, no sirve.
   (compatible con Apache-2.0) y si corre scripts de instalación.
 
 ### Continuidad
+
 - Deja el estado al día: qué quedó a medias y el próximo paso concreto. Actualízalo antes
   de quedarte sin contexto.
 
 ## Git y PRs
+
 - Nunca directo en `main`: rama `tipo/descripcion-corta` y PR. Merge solo squash.
 - Conventional Commits: tipo en inglés y descripción en español, concisa
   (`feat: agregar galería base`). El título del PR va igual, porque con squash es el commit.
@@ -81,6 +90,7 @@ gama baja o un notebook de 4 GB, no sirve.
 - Versiones: tag a mano en los hitos (`v1.0.0` = V1 completa) con un Release corto.
 
 ## Stack y comandos
+
 - Astro 7 solo como generador de HTML: sin frameworks de UI ni `<ClientRouter />`.
 - Node 26 LTS y pnpm 12, en versiones exactas en `package.json` (`packageManager`,
   `devEngines.runtime`).
@@ -95,6 +105,7 @@ gama baja o un notebook de 4 GB, no sirve.
   comando en local y en la CI; el `pre-push` lo exige.
 
 ## Reglas del sitio
+
 - Presupuestos por página en la CI, con el perfil móvil de Lighthouse. Galería: 0 KB de JS,
   LCP ≤ 1,8 s, carga inicial ≤ 300 KB. Explicador: JS ≤ 5 KB. Un presupuesto solo cambia
   en un PR con su motivo. El presupuesto de JS también protege las zonas: el código del
@@ -114,6 +125,7 @@ gama baja o un notebook de 4 GB, no sirve.
   a "clemgrass". Cada archivo nuevo queda cubierto por REUSE (cabecera SPDX o `REUSE.toml`).
 
 ## Testing
+
 - TDD en los scripts: ve fallar el test por la razón correcta. El layout y el CSS no
   admiten TDD; se declara, y se cubren con pruebas en el navegador y capturas.
 - Cada comportamiento nuevo lleva al menos un caso feliz, uno borde y uno negativo. Los
@@ -127,6 +139,7 @@ gama baja o un notebook de 4 GB, no sirve.
 - La cobertura es análisis, no meta.
 
 ## Despliegue
+
 - `check` corre en cada PR y en `main`. `deploy` corre solo en push a `main`: publica el
   mismo `dist/` que pasó los checks, con 3 reintentos cada 2 minutos, corre el smoke y hace
   rollback automático si falla.

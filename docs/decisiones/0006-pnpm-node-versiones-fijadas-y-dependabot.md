@@ -6,10 +6,12 @@ date: 2026-11-26
 # pnpm 12, Node 26, versiones fijadas, 7 días de edad mínima y Dependabot
 
 ## Contexto
+
 Si cada máquina usa otra versión, el resultado cambia. Un paquete recién publicado o con
 scripts de instalación es una puerta de entrada.
 
 ## Opciones
+
 - **pnpm 12.** Contras: hay que instalarlo.
 - **npm 11.** Contras: corre los scripts de instalación por defecto (`allowScripts` es
   solo una advertencia).
@@ -22,6 +24,7 @@ scripts de instalación es una puerta de entrada.
 - **Actualizar a mano.** Contras: se olvida.
 
 ## Decisión
+
 - pnpm 12 y la línea Node 26 LTS, en versiones exactas en `package.json`.
 - En `pnpm-workspace.yaml`: `minimumReleaseAge: 10080` (7 días, en minutos) y
   `savePrefix: ''`. Los scripts de instalación quedan bloqueados (`strictDepBuilds`) y solo
@@ -32,15 +35,18 @@ scripts de instalación es una puerta de entrada.
   versión exacta, en el mismo PR, y se saca cuando cumple los 7 días.
 
 ## Consecuencias
+
 - Al elegir una versión, se toma la última que tenga al menos 7 días.
 - Instalar y actualizar lo hace el usuario.
 
 ## Confirmación
+
 - `package.json` tiene `packageManager` y `devEngines.runtime` con versiones exactas.
 - `pnpm-workspace.yaml` tiene `minimumReleaseAge: 10080`.
 - `.github/dependabot.yml` tiene un `cooldown` de 7 días.
 
 ## Fuentes (2026-11-26)
+
 - pnpm.io/settings/build y /settings/dependency-resolution y /package_json.
 - docs.npmjs.com/cli/v11 (npm 11.21.3 no bloquea los scripts).
 - nodejs.org/en/about/previous-releases (Node 26 Active LTS).
