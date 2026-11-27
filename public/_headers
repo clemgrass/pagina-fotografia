@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 clemgrass
+# SPDX-License-Identifier: Apache-2.0
+
+# Cabeceras de Cloudflare (ADR 0007, ampliada por la ADR 0016). Las verifica
+# scripts/headers.test.ts. Una petición recibe las cabeceras de todas las
+# reglas que coinciden, en orden, y Cloudflare une con coma un nombre repetido:
+# las reglas específicas quitan con "!" lo que cambian.
+
+/*
+  Content-Security-Policy: default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Speculation-Rules: "/speculation-rules.json"
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Nombres con hash: el contenido de una URL no cambia nunca.
+/_astro/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
+# Las fotos son CC BY 4.0: otros sitios las pueden incrustar.
+/photos/*
+  ! Cache-Control
+  ! Cross-Origin-Resource-Policy
+  Cache-Control: public, max-age=31536000, immutable
+  Cross-Origin-Resource-Policy: cross-origin
+
+# El navegador ignora las reglas que no llegan con este tipo.
+/speculation-rules.json
+  Content-Type: application/speculationrules+json
