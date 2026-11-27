@@ -30,12 +30,14 @@ export const MANIFEST = '.cache/photos.json';
 export const WIDTHS = [480, 960, 1440, 2048] as const;
 const MAX_SIDE = 2048;
 
-// Calidades provisorias: se eligen a la vista contra los escaneos (ADR 0004).
+// Calidades elegidas a la vista el 2026-11-27 (ADR 0004), con recortes al
+// 100 % de banca-en-el-parque, flor-entre-hojas y membrillo: AVIF 70 y JPEG 90
+// fueron las primeras sin pérdida visible del grano.
 // effort 2 en AVIF: 7 veces más rápido que 4 y solo un 3 % más pesado,
 // medido con anden-del-metro a 2043 px (2,5 s contra 17 s).
 const ENCODERS = {
-  avif: { quality: 60, effort: 2 },
-  jpeg: { quality: 80, mozjpeg: true },
+  avif: { quality: 70, effort: 2 },
+  jpeg: { quality: 90, mozjpeg: true },
 } as const;
 type Format = keyof typeof ENCODERS;
 
