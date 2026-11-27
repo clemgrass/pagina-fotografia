@@ -12,6 +12,7 @@ path = [
   "pnpm-lock.yaml",
   "NOTICE",
   ".claude/settings.json",
+  "public/speculation-rules.json",
 ]
 SPDX-FileCopyrightText = "2026 clemgrass"
 SPDX-License-Identifier = "Apache-2.0"
