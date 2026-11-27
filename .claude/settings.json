@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Read(**/.dev.vars*)",
+      "Read(**/.wrangler/**)",
+      "Read(~/.wrangler/**)",
+      "Read(~/.config/.wrangler/**)",
+      "Bash(git push *--force*)",
+      "Bash(git push * -f*)",
+      "Bash(git push *+*)",
+      "Bash(*--no-verify*)",
+      "Bash(*hooksPath*)",
+      "Bash(*wrangler deploy*)",
+      "Bash(*wrangler rollback*)",
+      "Bash(*wrangler delete*)",
+      "Bash(*wrangler secret*)",
+      "Bash(gh secret *)",
+      "Bash(gh repo delete *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm i *)",
+      "Bash(pnpm update *)",
+      "Bash(pnpm up *)",
+      "Bash(pnpm remove *)",
+      "Bash(pnpm rm *)",
+      "Bash(npm install *)",
+      "Bash(npm i *)",
+      "Edit(/.claude/**)",
+      "Edit(/pnpm-lock.yaml)",
+      "Edit(/dist/**)",
+      "Edit(/.cache/**)",
+      "Edit(/photos/originals/**)"
+    ],
+    "ask": [
+      "Edit(/.github/**)",
+      "Edit(/.githooks/**)",
+      "Edit(/lighthouserc*)",
+      "Edit(/.lighthouserc*)"
+    ]
+  }
+}
